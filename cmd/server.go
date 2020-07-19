@@ -16,6 +16,7 @@ limitations under the License.
 package cmd
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/spf13/cobra"
@@ -23,10 +24,16 @@ import (
 	"github.com/yuhangch/geoserver-cli/config"
 )
 
+var (
+	serverURLFlag      string
+	serverUsernameFlag string
+	serverPasswordFlag string
+)
+
 // serverCmd represents the server command
 var serverCmd = &cobra.Command{
 	Use:   "server",
-	Short: "A brief description of your command",
+	Short: "Server commander to control the local server config",
 	Long: `A longer description that spans multiple lines and likely contains examples
 and usage of using your command. For example:
 
@@ -40,21 +47,50 @@ to quickly create a Cobra application.`,
 
 var serverCreateCmd = &cobra.Command{
 	Use:   "create",
-	Short: "A brief description of your command",
+	Short: "To add a new server to local config",
 	Long: `A longer description that spans multiple lines and likely contains examples
 and usage of using your command. For example:
 
 Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
+	Args: func(cmd *cobra.Command, args []string) error {
+		if len(args) < 1 {
+			return errors.New("requires a server's alias")
+		}
+		return nil
+	},
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("server create called")
+
+		serverCreate(args[0])
+	},
+}
+
+var serverDeleteCmd = &cobra.Command{
+	Use:     "delete",
+	Aliases: deleteAlias,
+	Short:   "A brief description of your command",
+	Long: `A longer description that spans multiple lines and likely contains examples
+and usage of using your command. For example:
+
+Cobra is a CLI library for Go that empowers applications.
+This application is a tool to generate the needed files
+to quickly create a Cobra application.`,
+	Args: func(cmd *cobra.Command, args []string) error {
+		if len(args) < 1 {
+			return errors.New("requires a server's alias")
+		}
+		return nil
+	},
+	Run: func(cmd *cobra.Command, args []string) {
+		serverDelete(args[0])
 	},
 }
 
 var serverListCmd = &cobra.Command{
-	Use:   "list",
-	Short: "A brief description of your command",
+	Use:     "list",
+	Aliases: listAlias,
+	Short:   "A brief description of your command",
 	Long: `A longer description that spans multiple lines and likely contains examples
 and usage of using your command. For example:
 
@@ -67,26 +103,39 @@ to quickly create a Cobra application.`,
 }
 
 func serverList() {
-
-	fmt.Println(config.ServersFmt(cfg.Servers))
-
+	fmt.Println(cfg.Servers.ServersFmt())
 }
 
-func serverCreate() {
+func serverCreate(alias string) {
 	cfg.Servers = append(cfg.Servers, config.Server{
-		Alias:    "server3",
-		URL:      "222sss",
-		Username: "222sss",
-		Password: "222sss",
+		Alias:    alias,
+		URL:      serverURLFlag,
+		Username: serverUsernameFlag,
+		Password: serverPasswordFlag,
 	})
 	viper.Set("Servers", cfg.Servers)
 	viper.WriteConfig()
 }
 
+func serverDelete(alias string) {
+	i := cfg.Servers.IndexOf(alias)
+	if i < 0 {
+		fmt.Println("No such server")
+		return
+	}
+	cfg.Servers = append(cfg.Servers[:i], cfg.Servers[i+1:]...)
+	viper.Set("Servers", cfg.Servers)
+	viper.WriteConfig()
+	fmt.Println("Delete success")
+
+}
+
 func init() {
 	rootCmd.AddCommand(serverCmd)
-	serverCmd.AddCommand(serverCreateCmd)
-	serverCmd.AddCommand(serverListCmd)
+	serverCmd.AddCommand(serverCreateCmd, serverListCmd, serverDeleteCmd)
+	serverCreateCmd.Flags().StringVarP(&serverURLFlag, "url", "u", "", "Server url")
+	serverCreateCmd.Flags().StringVarP(&serverUsernameFlag, "username", "n", "", "Server username")
+	serverCreateCmd.Flags().StringVarP(&serverPasswordFlag, "password", "p", "", "Server password")
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command

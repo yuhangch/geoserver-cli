@@ -29,12 +29,17 @@ import (
 var (
 	cfgFile string
 	cfg     config.Config
+
+	listAlias   = []string{"ls"}
+	renameAlias = []string{"mv"}
+	deleteAlias = []string{"rm", "remove", "del"}
+	createAlias = []string{"add", "new"}
 )
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "gctl",
-	Short: "GeoServer CLI Client",
+	Short: "GeoServer CLI control panel",
 	Long: `A longer description that spans multiple lines and likely contains
 examples and usage of using your application. For example:
 

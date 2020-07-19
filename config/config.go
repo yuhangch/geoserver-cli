@@ -6,7 +6,7 @@ import (
 )
 
 type Config struct {
-	Servers []Server
+	Servers Servers
 	Server  int
 }
 

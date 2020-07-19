@@ -1,2 +1,3 @@
 .geoserver-cli*
 /vendor
+gctl
