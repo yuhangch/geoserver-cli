@@ -17,19 +17,24 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
+	"log"
 	"os"
 
-	homedir "github.com/mitchellh/go-homedir"
+	"github.com/spf13/cobra"
+	"github.com/yuhangch/geoserver-cli/config"
+
 	"github.com/spf13/viper"
 )
 
-var cfgFile string
+var (
+	cfgFile string
+	cfg     config.Config
+)
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "geoserver-cli",
-	Short: "A brief description of your application",
+	Use:   "gctl",
+	Short: "GeoServer CLI Client",
 	Long: `A longer description that spans multiple lines and likely contains
 examples and usage of using your application. For example:
 
@@ -71,14 +76,14 @@ func initConfig() {
 		viper.SetConfigFile(cfgFile)
 	} else {
 		// Find home directory.
-		home, err := homedir.Dir()
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
+		// home, err := homedir.Dir()
+		// if err != nil {
+		// 	fmt.Println(err)
+		// 	os.Exit(1)
+		// }
 
 		// Search config in home directory with name ".geoserver-cli" (without extension).
-		viper.AddConfigPath(home)
+		viper.AddConfigPath("./")
 		viper.SetConfigName(".geoserver-cli")
 	}
 
@@ -86,6 +91,11 @@ func initConfig() {
 
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
-		fmt.Println("Using config file:", viper.ConfigFileUsed())
+		// fmt.Println("Using config file:", viper.ConfigFileUsed())
+	}
+
+	err := viper.Unmarshal(&cfg)
+	if err != nil {
+		log.Fatalln(err)
 	}
 }
