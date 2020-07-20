@@ -21,9 +21,8 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
-	"github.com/yuhangch/geoserver-cli/config"
-
 	"github.com/spf13/viper"
+	"github.com/yuhangch/geoserver-cli/config"
 )
 
 var (
@@ -84,12 +83,14 @@ func initConfig() {
 		// Use config file from the flag.
 		viper.SetConfigFile(cfgFile)
 	} else {
-		// Find home directory.
-		// home, err := homedir.Dir()
+		//Find home directory.
+		// home, err := os.UserHomeDir()
 		// if err != nil {
 		// 	fmt.Println(err)
 		// 	os.Exit(1)
 		// }
+		// fmt.Println(home)
+		fmt.Println(os.TempDir())
 
 		// Search config in home directory with name ".geoserver-cli" (without extension).
 		viper.AddConfigPath("./")

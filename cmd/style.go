@@ -16,12 +16,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import (
+	"encoding/json"
+	"errors"
 	"fmt"
-	"io"
-	"os"
-	"os/exec"
 
 	"github.com/spf13/cobra"
+	"github.com/yuhangch/geoserver-cli/api"
 )
 
 // styleCmd represents the style command
@@ -39,22 +39,6 @@ to quickly create a Cobra application.`,
 	},
 }
 
-func pipe(cmds ...*exec.Cmd) {
-	for i, cmd := range cmds {
-		if i > 0 {
-			out, _ := cmds[i-1].StdoutPipe()
-			in, _ := cmd.StdinPipe()
-			go func() {
-				defer func() {
-					out.Close()
-					in.Close()
-				}()
-				io.Copy(in, out)
-			}()
-		}
-	}
-}
-
 // styleEditCmd represents the style command
 var styleEditCmd = &cobra.Command{
 	Use:   "edit",
@@ -66,20 +50,39 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		c1 := exec.Command("cat go.mod")
-		c2 := exec.Command("vi -")
-		c2.Stdin, _ = c1.StdoutPipe()
-		c2.Stdout = os.Stdout
-		_ = c2.Start()
-		_ = c1.Run()
-		_ = c2.Wait()
+		ws, name, _ := api.ParseName(args[0], workspace)
+		api.StyleEdit(&cfg, ws, name)
+	},
+}
 
+// styleEditCmd represents the style command
+var styleInfoCmd = &cobra.Command{
+	Use:   "info",
+	Short: "A brief description of your command",
+	Long: `A longer description that spans multiple lines and likely contains examples
+and usage of using your command. For example:
+
+Cobra is a CLI library for Go that empowers applications.
+This application is a tool to generate the needed files
+to quickly create a Cobra application.`,
+	Args: func(cmd *cobra.Command, args []string) error {
+		if len(args) < 1 {
+			return errors.New("require style name")
+		}
+		return nil
+	},
+	Run: func(cmd *cobra.Command, args []string) {
+		ws, name, _ := api.ParseName(args[0], workspace)
+		s, _ := api.StyleGet(&cfg, ws, name)
+		p, _ := json.MarshalIndent(s, "", "  ")
+
+		fmt.Printf("%s \n", p)
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(styleCmd)
-	styleCmd.AddCommand(styleEditCmd)
+	styleCmd.AddCommand(styleEditCmd, styleInfoCmd)
 
 	// Here you will define your flags and configuration settings.
 

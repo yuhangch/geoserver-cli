@@ -72,7 +72,7 @@ func DataStoresCreate(cfg *config.Config, ws, name, path string) error {
 		return fmt.Errorf("can't access such file: %w", err)
 	}
 
-	req := NewZipRequest(cfg, method, url, f)
+	req := NewReqAccept(cfg, method, url, "application/zip", f)
 	DoCreate(req)
 	return nil
 }

@@ -21,9 +21,31 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"strings"
 
 	"github.com/yuhangch/geoserver-cli/config"
 )
+
+// ParseName parse name with workspace or not.
+func ParseName(fullname, workspace string) (ws string, name string, err error) {
+	if strings.Contains(fullname, ":") {
+		strs := strings.Split(fullname, ":")
+		if len(strs) < 2 {
+			err = fmt.Errorf("illegal name")
+		}
+		ws = strs[0]
+		name = strs[1]
+		err = nil
+	} else {
+		if len(workspace) < 1 {
+			err = fmt.Errorf("require a workspace name")
+		}
+		ws = workspace
+		name = fullname
+
+	}
+	return
+}
 
 // NewRequest to build a request from a server config.
 func NewRequest(cfg *config.Config, method, url string, payload io.Reader) *http.Request {
@@ -34,6 +56,38 @@ func NewRequest(cfg *config.Config, method, url string, payload io.Reader) *http
 	}
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Accept", "application/json")
+	auth, err := cfg.BasicAuth()
+	if err != nil {
+		fmt.Println(err)
+	}
+	req.Header.Add("Authorization", "Basic "+auth)
+	return req
+}
+
+// NewReqAccept to build a request with custom accept.
+func NewReqAccept(cfg *config.Config, method, url, accept string, payload io.Reader) *http.Request {
+	req, err := http.NewRequest(method, url, payload)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+	req.Header.Add("Accept", accept)
+	auth, err := cfg.BasicAuth()
+	if err != nil {
+		fmt.Println(err)
+	}
+	req.Header.Add("Authorization", "Basic "+auth)
+	return req
+}
+
+// NewReqContain to build a request with custom accept.
+func NewReqContain(cfg *config.Config, method, url, content string, payload io.Reader) *http.Request {
+	req, err := http.NewRequest(method, url, payload)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+	req.Header.Add("Content-Type", content)
 	auth, err := cfg.BasicAuth()
 	if err != nil {
 		fmt.Println(err)
