@@ -23,9 +23,9 @@ import (
 	"github.com/yuhangch/geoserver-cli/api"
 )
 
-// workspaceCmd represents the workspace command
-var workspaceCmd = &cobra.Command{
-	Use:   "workspace",
+// layerCmd represents the layer command
+var layerCmd = &cobra.Command{
+	Use:   "layer",
 	Short: "A brief description of your command",
 	Long: `A longer description that spans multiple lines and likely contains examples
 and usage of using your command. For example:
@@ -34,12 +34,12 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-
+		fmt.Println("layer called")
 	},
 }
 
-// workspaceCmd represents the workspace command
-var workspaceListCmd = &cobra.Command{
+// layerCmd represents the layer command
+var layerListCmd = &cobra.Command{
 	Use:     "list",
 	Aliases: listAlias,
 	Short:   "A brief description of your command",
@@ -49,37 +49,13 @@ and usage of using your command. For example:
 Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
-
 	Run: func(cmd *cobra.Command, args []string) {
-		api.WorkSpacesGet(&cfg)
+		api.LayersGet(&cfg, workspace)
 	},
 }
 
-// workspaceCmd represents the workspace command
-var workspaceCreateCmd = &cobra.Command{
-	Use:   "create",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Args: func(cmd *cobra.Command, args []string) error {
-		if len(args) < 1 {
-			return errors.New("requires a workspace name")
-		}
-		return nil
-	},
-	Run: func(cmd *cobra.Command, args []string) {
-		// fmt.Println(args[0])
-		api.WorkSpacesPost(&cfg, args[0])
-
-	},
-}
-
-// workspaceCmd represents the workspace command
-var workspaceDeleteCmd = &cobra.Command{
+// layerDeleteCmd represents the layer delete command
+var layerDeleteCmd = &cobra.Command{
 	Use:     "delete",
 	Aliases: deleteAlias,
 	Short:   "A brief description of your command",
@@ -91,56 +67,25 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 1 {
-			return errors.New("requires a workspace name")
+			return errors.New("require layer name")
 		}
 		return nil
 	},
 	Run: func(cmd *cobra.Command, args []string) {
-		if len(args) < 1 {
-			fmt.Println("Need workspace name")
-			return
-		}
-		// fmt.Println(args[0])
-		api.WorkSpaceDelete(&cfg, args[0])
-
+		api.LayerDelete(&cfg, workspace, args[0])
 	},
 }
-
-// workspaceCmd represents the workspace command
-var workspacePutCmd = &cobra.Command{
-	Use:     "rename",
-	Aliases: renameAlias,
-	Short:   "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Args: func(cmd *cobra.Command, args []string) error {
-		if len(args) < 2 {
-			return errors.New("requires both workspace's old name and new name")
-		}
-		return nil
-	},
-	Run: func(cmd *cobra.Command, args []string) {
-		api.WorkSpacePut(&cfg, args[0], args[1])
-
-	},
-}
-
-// workspaceList to get workspace list from server.
 
 func init() {
-	rootCmd.AddCommand(workspaceCmd)
-	workspaceCmd.AddCommand(workspaceListCmd, workspaceCreateCmd, workspaceDeleteCmd, workspacePutCmd)
+	rootCmd.AddCommand(layerCmd)
+	layerCmd.AddCommand(layerListCmd, layerDeleteCmd)
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// workspaceCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// layerCmd.PersistentFlags().String("foo", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// workspaceCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// layerCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

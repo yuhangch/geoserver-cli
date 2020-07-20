@@ -4,3 +4,5 @@
 
 - server config 
 - workspace  crud
+- datastore (shapefile upload)
+- layer (list delete)
