@@ -12,6 +12,15 @@ const (
 	workspacePattern  string = "%s/rest/workspaces/%s"
 )
 
+var (
+	workspaceDeleteStatus map[int]string = map[int]string{
+		200: "Success workspace deleted",
+		403: "Workspace or related Namespace is not empty (and recurse not true)",
+		404: "Workspace doesn’t exist",
+		405: "Can’t delete default workspace",
+	}
+)
+
 // WorkSpaceResponse the model of response of workspaces list.
 type WorkSpaceResponse struct {
 	Workspaces map[string][]Entry
@@ -29,7 +38,7 @@ type WorkSpace struct {
 
 // Fmt to fmt print workspace list.
 func (w *WorkSpaceResponse) Fmt() string {
-	s := "Workspace:\n"
+	s := "Workspaces:\n"
 	for i, v := range w.Workspaces["workspace"] {
 		s += fmt.Sprintf("  - %d %s \n", i, v.Name)
 	}
@@ -69,7 +78,7 @@ func WorkSpacePut(cfg *config.Config, oldname, newname string) {
 	payload := strings.NewReader(fmt.Sprintf("{\"workspace\":{\"name\":\"%s\"}}", newname))
 
 	req := NewRequest(cfg, method, url, payload)
-	Do(req, fmt.Sprintf("%s renamed to %s", oldname, newname), "Rename failed")
+	SimplyDo(req, fmt.Sprintf("%s renamed to %s", oldname, newname), "Rename failed")
 }
 
 // WorkSpaceDelCode del response code .
@@ -86,5 +95,5 @@ func WorkSpaceDelete(cfg *config.Config, name string) {
 	payload := strings.NewReader(fmt.Sprintf("{\"workspace\":{\"name\":\"%s\"}}", name))
 
 	req := NewRequest(cfg, method, url, payload)
-	Del(req)
+	Del(req, workspaceDeleteStatus)
 }

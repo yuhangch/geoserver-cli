@@ -27,75 +27,110 @@ func NewRequest(cfg *config.Config, method, url string, payload io.Reader) *http
 	return req
 }
 
+// NewZipRequest to build a request from a server config.
+func NewZipRequest(cfg *config.Config, method, url string, payload io.Reader) *http.Request {
+	req, err := http.NewRequest(method, url, payload)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+	req.Header.Add("Content-Type", "application/zip")
+	req.Header.Add("Accept", "application/json")
+	auth, err := cfg.BasicAuth()
+	if err != nil {
+		fmt.Println(err)
+	}
+	req.Header.Add("Authorization", "Basic "+auth)
+	return req
+}
+
+// Do to execute a request.
+func Do(req *http.Request) (int, []byte, error) {
+	client := &http.Client{}
+	res, err := client.Do(req)
+	if err != nil {
+		return -1, nil, err
+	}
+	defer res.Body.Close()
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return -1, nil, err
+	}
+	return res.StatusCode, body, nil
+}
+
 // Get to unmarshal body.
-func Get(req *http.Request, to interface{}) {
-	client := &http.Client{}
+func Get(req *http.Request, to interface{}) error {
 
-	res, err := client.Do(req)
+	_, body, err := Do(req)
 	if err != nil {
-
+		return fmt.Errorf("can't not get the response body")
 	}
-	defer res.Body.Close()
-	body, err := ioutil.ReadAll(res.Body)
-	json.Unmarshal(body, &to)
+	err = json.Unmarshal(body, &to)
+	if err != nil {
+		return fmt.Errorf("can't not unmarshal the body")
+	}
+
+	return nil
 }
 
-// GetTxt to get response in pure text.
-func GetText(req *http.Request, pattern string) {
-	client := &http.Client{}
+// GetText to get response in pure text.
+func GetText(req *http.Request, pattern string) error {
 
-	res, err := client.Do(req)
+	code, body, err := Do(req)
 	if err != nil {
-
+		return fmt.Errorf("http request error: %w", err)
 	}
 
-	defer res.Body.Close()
-	if res.StatusCode == 401 {
-		fmt.Println("execute faild")
-		return
+	if code == 401 {
+		return fmt.Errorf("execute failed: %w", err)
 	}
-	body, err := ioutil.ReadAll(res.Body)
 	fmt.Println(fmt.Sprintf(pattern, string(body)))
+	return nil
 }
 
-// Do just do a request.
-func Do(req *http.Request, s, f string) {
-	client := &http.Client{}
+// SimplyDo just do a request.
+func SimplyDo(req *http.Request, s, f string) error {
 
-	res, err := client.Do(req)
+	code, _, err := Do(req)
 	if err != nil {
-
+		return fmt.Errorf("http request error: %w", err)
 	}
 
-	defer res.Body.Close()
-	if res.StatusCode == 200 {
+	if code == 200 {
 		fmt.Println(s)
 	} else {
 		fmt.Println(f)
 	}
+	return nil
+}
+
+// DoCreate to do a request for create.
+func DoCreate(req *http.Request) error {
+	code, _, err := Do(req)
+	if err != nil {
+		return fmt.Errorf("http request error: %w", err)
+	}
+	if code == 201 {
+		fmt.Println("Created")
+	} else {
+		fmt.Println("Failed to create")
+	}
+	return nil
 }
 
 // Del to get response in del response.
-func Del(req *http.Request) {
-	client := &http.Client{}
+func Del(req *http.Request, status map[int]string) error {
 
-	res, err := client.Do(req)
+	code, _, err := Do(req)
 	if err != nil {
-
+		return fmt.Errorf("http request error: %w", err)
 	}
 
-	defer res.Body.Close()
-	status := res.StatusCode
-	switch status {
-	case 200:
-		fmt.Println("Success workspace deleted")
-	case 403:
-		fmt.Println("Workspace or related Namespace is not empty (and recurse not true)")
-	case 404:
-		fmt.Println("Workspace doesn’t exist")
-	case 405:
-		fmt.Println("Can’t delete default workspace")
-	default:
-		fmt.Println("Unknown error")
+	if msg, ok := status[code]; ok {
+		fmt.Println(msg)
+		return nil
 	}
+	return fmt.Errorf("unknown error")
+
 }

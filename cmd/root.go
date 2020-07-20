@@ -27,8 +27,10 @@ import (
 )
 
 var (
-	cfgFile string
-	cfg     config.Config
+	cfgFile   string
+	workspace string
+	recurse   bool
+	cfg       config.Config
 
 	listAlias   = []string{"ls"}
 	renameAlias = []string{"mv"}
@@ -68,6 +70,8 @@ func init() {
 	// will be global for your application.
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.geoserver-cli.yaml)")
+	rootCmd.PersistentFlags().StringVar(&workspace, "workspace", "", "select a workspace")
+	rootCmd.PersistentFlags().BoolVarP(&recurse, "recurse", "r", false, "recurse delete")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
