@@ -33,13 +33,8 @@ var (
 // datastoreCmd represents the datastore command
 var datastoreCmd = &cobra.Command{
 	Use:   "datastore",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "Manage data stores.",
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("datastore called")
 	},
@@ -49,13 +44,8 @@ to quickly create a Cobra application.`,
 var datastoreListCmd = &cobra.Command{
 	Use:     "list",
 	Aliases: listAlias,
-	Short:   "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short:   "Get datastores list in a workspace",
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(workspace) < 1 && len(args) < 1 {
 			return errors.New("requires a workspace name")
@@ -79,13 +69,8 @@ to quickly create a Cobra application.`,
 var datastoreCreateCmd = &cobra.Command{
 	Use:     "create",
 	Aliases: createAlias,
-	Short:   "create a new datastore in a select workspace",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short:   "Create a new datastore in a select workspace",
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
 	Args: func(cmd *cobra.Command, args []string) error {
 
 		if len(args) < 1 {
@@ -108,13 +93,8 @@ to quickly create a Cobra application.`,
 var datastoreDeleteCmd = &cobra.Command{
 	Use:     "delete",
 	Aliases: deleteAlias,
-	Short:   "create a new datastore in a select workspace",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short:   "Create a new datastore in a select workspace",
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
 	Args: func(cmd *cobra.Command, args []string) error {
 
 		if len(args) < 1 {

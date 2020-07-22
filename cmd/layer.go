@@ -26,13 +26,8 @@ import (
 // layerCmd represents the layer command
 var layerCmd = &cobra.Command{
 	Use:   "layer",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "Manage layers",
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("layer called")
 	},
@@ -42,13 +37,8 @@ to quickly create a Cobra application.`,
 var layerListCmd = &cobra.Command{
 	Use:     "list",
 	Aliases: listAlias,
-	Short:   "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short:   "Get layers list in a workspace",
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		api.LayersGet(&cfg, workspace)
 	},
@@ -58,13 +48,8 @@ to quickly create a Cobra application.`,
 var layerDeleteCmd = &cobra.Command{
 	Use:     "delete",
 	Aliases: deleteAlias,
-	Short:   "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short:   "Delete a layer",
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 1 {
 			return errors.New("require layer name")

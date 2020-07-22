@@ -27,13 +27,8 @@ import (
 // styleCmd represents the style command
 var styleCmd = &cobra.Command{
 	Use:   "style",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "Manage styles",
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("style called")
 	},
@@ -42,13 +37,8 @@ to quickly create a Cobra application.`,
 // styleEditCmd represents the style command
 var styleEditCmd = &cobra.Command{
 	Use:   "edit",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "Edit a style in vim",
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		ws, name, _ := api.ParseName(args[0], workspace)
 		api.StyleEdit(&cfg, ws, name)
@@ -58,13 +48,8 @@ to quickly create a Cobra application.`,
 // styleEditCmd represents the style command
 var styleInfoCmd = &cobra.Command{
 	Use:   "info",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "Get info of a style",
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 1 {
 			return errors.New("require style name")

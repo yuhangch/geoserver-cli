@@ -34,12 +34,7 @@ var (
 var serverCmd = &cobra.Command{
 	Use:   "server",
 	Short: "Server commander to control the local server config",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("server called")
 	},
@@ -48,12 +43,7 @@ to quickly create a Cobra application.`,
 var serverCreateCmd = &cobra.Command{
 	Use:   "create",
 	Short: "To add a new server to local config",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 1 {
 			return errors.New("requires a server's alias")
@@ -70,12 +60,7 @@ var serverActivateCmd = &cobra.Command{
 	Use:     "activate",
 	Aliases: []string{"set"},
 	Short:   "To add a new server to local config",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 1 {
 			return errors.New("requires a server's alias")
@@ -91,13 +76,8 @@ to quickly create a Cobra application.`,
 var serverDeleteCmd = &cobra.Command{
 	Use:     "delete",
 	Aliases: deleteAlias,
-	Short:   "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short:   "Delete a server in configuration",
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 1 {
 			return errors.New("requires a server's alias")
@@ -112,13 +92,8 @@ to quickly create a Cobra application.`,
 var serverListCmd = &cobra.Command{
 	Use:     "list",
 	Aliases: listAlias,
-	Short:   "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short:   "List servers in configuration",
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		serverList()
 	},

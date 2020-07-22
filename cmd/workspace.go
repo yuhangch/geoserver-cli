@@ -26,13 +26,8 @@ import (
 // workspaceCmd represents the workspace command
 var workspaceCmd = &cobra.Command{
 	Use:   "workspace",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "Manage workspaces",
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 
 	},
@@ -42,13 +37,7 @@ to quickly create a Cobra application.`,
 var workspaceListCmd = &cobra.Command{
 	Use:     "list",
 	Aliases: listAlias,
-	Short:   "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short:   "List workspaces",
 
 	Run: func(cmd *cobra.Command, args []string) {
 		api.WorkSpacesGet(&cfg)
@@ -58,13 +47,8 @@ to quickly create a Cobra application.`,
 // workspaceCmd represents the workspace command
 var workspaceCreateCmd = &cobra.Command{
 	Use:   "create",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "Create a new workspace",
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 1 {
 			return errors.New("requires a workspace name")
@@ -82,13 +66,8 @@ to quickly create a Cobra application.`,
 var workspaceDeleteCmd = &cobra.Command{
 	Use:     "delete",
 	Aliases: deleteAlias,
-	Short:   "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short:   "Delete a workspace",
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 1 {
 			return errors.New("requires a workspace name")
@@ -110,13 +89,8 @@ to quickly create a Cobra application.`,
 var workspacePutCmd = &cobra.Command{
 	Use:     "rename",
 	Aliases: renameAlias,
-	Short:   "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short:   "Rename a workspace",
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 2 {
 			return errors.New("requires both workspace's old name and new name")

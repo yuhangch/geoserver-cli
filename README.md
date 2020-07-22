@@ -8,6 +8,13 @@
 - layer (RD)
 - style (edit in vim,RU)
 
+## Install:
+
+```shell
+$ go get github.com/yuhangch/geoserver-cli
+$ gctl
+```
+
 
 ## Usage
 
