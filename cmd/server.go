@@ -66,6 +66,28 @@ to quickly create a Cobra application.`,
 	},
 }
 
+var serverActivateCmd = &cobra.Command{
+	Use:     "activate",
+	Aliases: []string{"set"},
+	Short:   "To add a new server to local config",
+	Long: `A longer description that spans multiple lines and likely contains examples
+and usage of using your command. For example:
+
+Cobra is a CLI library for Go that empowers applications.
+This application is a tool to generate the needed files
+to quickly create a Cobra application.`,
+	Args: func(cmd *cobra.Command, args []string) error {
+		if len(args) < 1 {
+			return errors.New("requires a server's alias")
+		}
+		return nil
+	},
+	Run: func(cmd *cobra.Command, args []string) {
+
+		serverActivate(args[0])
+	},
+}
+
 var serverDeleteCmd = &cobra.Command{
 	Use:     "delete",
 	Aliases: deleteAlias,
@@ -107,6 +129,12 @@ func serverList() {
 }
 
 func serverCreate(alias string) {
+	i := cfg.Servers.IndexOf(alias)
+	if i > -1 {
+		fmt.Printf("%s already exists\n", alias)
+		return
+	}
+
 	cfg.Servers = append(cfg.Servers, config.Server{
 		Alias:    alias,
 		URL:      serverURLFlag,
@@ -115,6 +143,7 @@ func serverCreate(alias string) {
 	})
 	viper.Set("Servers", cfg.Servers)
 	viper.WriteConfig()
+	fmt.Printf("Server %s added to configuration", alias)
 }
 
 func serverDelete(alias string) {
@@ -129,10 +158,21 @@ func serverDelete(alias string) {
 	fmt.Println("Delete success")
 
 }
+func serverActivate(alias string) {
+	i := cfg.Servers.IndexOf(alias)
+	if i < 0 {
+		fmt.Println("No such server")
+		return
+	}
+	cfg.Server = i
+	viper.Set("Server", cfg.Server)
+	viper.WriteConfig()
+	fmt.Println("Now working on " + alias)
 
+}
 func init() {
 	rootCmd.AddCommand(serverCmd)
-	serverCmd.AddCommand(serverCreateCmd, serverListCmd, serverDeleteCmd)
+	serverCmd.AddCommand(serverCreateCmd, serverListCmd, serverDeleteCmd, serverActivateCmd)
 	serverCreateCmd.Flags().StringVarP(&serverURLFlag, "url", "u", "", "Server url")
 	serverCreateCmd.Flags().StringVarP(&serverUsernameFlag, "username", "n", "", "Server username")
 	serverCreateCmd.Flags().StringVarP(&serverPasswordFlag, "password", "p", "", "Server password")

@@ -90,7 +90,7 @@ func initConfig() {
 		// 	os.Exit(1)
 		// }
 		// fmt.Println(home)
-		fmt.Println(os.TempDir())
+		// fmt.Println(os.TempDir())
 
 		// Search config in home directory with name ".geoserver-cli" (without extension).
 		viper.AddConfigPath("./")

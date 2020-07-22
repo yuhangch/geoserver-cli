@@ -93,7 +93,7 @@ func WorkSpacePut(cfg *config.Config, oldname, newname string) {
 	payload := strings.NewReader(fmt.Sprintf("{\"workspace\":{\"name\":\"%s\"}}", newname))
 
 	req := NewRequest(cfg, method, url, payload)
-	SimplyDo(req, fmt.Sprintf("%s renamed to %s", oldname, newname), "Rename failed")
+	DoWithMsg(req, fmt.Sprintf("%s renamed to %s", oldname, newname), "Rename failed")
 }
 
 // WorkSpaceDelCode del response code .

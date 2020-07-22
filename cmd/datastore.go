@@ -4,6 +4,7 @@ package cmd
 Copyright © 2020 Yuhang Chen <i@yuhang.ch>
 
 Licensed under the Apache License, Version 2.0 (the "License");
+Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
@@ -24,7 +25,9 @@ import (
 )
 
 var (
-	datastoreFile string
+	datastoreFile      string
+	datastoreMethod    string
+	datastoreConfigure string
 )
 
 // datastoreCmd represents the datastore command
@@ -54,14 +57,21 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Args: func(cmd *cobra.Command, args []string) error {
-		if len(workspace) < 1 {
+		if len(workspace) < 1 && len(args) < 1 {
 			return errors.New("requires a workspace name")
 		}
 		return nil
 	},
 
 	Run: func(cmd *cobra.Command, args []string) {
-		api.DataStoresGet(&cfg, workspace)
+		var ws string
+		if len(workspace) > 0 {
+			ws = workspace
+		} else {
+			ws = args[0]
+		}
+
+		api.DataStoresGet(&cfg, ws)
 	},
 }
 
@@ -77,9 +87,7 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Args: func(cmd *cobra.Command, args []string) error {
-		if len(workspace) < 1 {
-			return errors.New("requires a workspace name")
-		}
+
 		if len(args) < 1 {
 			return errors.New("require datastore name")
 		}
@@ -87,7 +95,12 @@ to quickly create a Cobra application.`,
 	},
 
 	Run: func(cmd *cobra.Command, args []string) {
-		api.DataStoresCreate(&cfg, workspace, args[0], datastoreFile)
+		ws, name, err := api.ParseName(args[0], workspace)
+		if err != nil {
+			fmt.Println("datastore name error")
+		}
+		api.DataStoresCreate(&cfg, ws, name, datastoreFile, datastoreMethod, datastoreConfigure)
+
 	},
 }
 
@@ -103,9 +116,7 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Args: func(cmd *cobra.Command, args []string) error {
-		if len(workspace) < 1 {
-			return errors.New("requires a workspace name")
-		}
+
 		if len(args) < 1 {
 			return errors.New("require datastore name")
 		}
@@ -113,7 +124,11 @@ to quickly create a Cobra application.`,
 	},
 
 	Run: func(cmd *cobra.Command, args []string) {
-		api.DataStoreDelete(&cfg, workspace, args[0], recurse)
+		ws, name, err := api.ParseName(args[0], workspace)
+		if err != nil {
+			fmt.Println("datastore name error")
+		}
+		api.DataStoreDelete(&cfg, ws, name, recurse)
 	},
 }
 
@@ -130,4 +145,6 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	datastoreCreateCmd.Flags().StringVarP(&datastoreFile, "file", "f", "", "file path")
+	datastoreCreateCmd.Flags().StringVarP(&datastoreConfigure, "configure", "", "none", "set configure")
+	datastoreCreateCmd.Flags().StringVarP(&datastoreMethod, "method", "", "file", "set datastore method(file,url,external)")
 }

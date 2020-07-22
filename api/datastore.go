@@ -25,8 +25,17 @@ import (
 const (
 	datastoresPattern         string = "%s/rest/workspaces/%s/datastores"
 	datastorePattern          string = "%s/rest/workspaces/%s/datastores/%s"
-	datastoreCreateShpPattern string = "%s/rest/workspaces/%s/datastores/%s/file.shp"
+	datastoreCreateShpPattern string = "%s/rest/workspaces/%s/datastores/%s/%s.shp?configure=%s"
 )
+
+// StoreMethod represent upload method for create datastore.
+// type StoreMethod string
+
+// const (
+// 	FileMethod     StoreMethod = "file"
+// 	URLMethod      StoreMethod = "url"
+// 	ExternalMethod StoreMethod = "external"
+// )
 
 var (
 	datastoreDeleteStatus map[int]string = map[int]string{
@@ -64,15 +73,14 @@ func DataStoresGet(cfg *config.Config, ws string) error {
 }
 
 // DataStoresCreate to get datastores list for workspaces.
-func DataStoresCreate(cfg *config.Config, ws, name, path string) error {
-	url := fmt.Sprintf(datastoreCreateShpPattern, cfg.ServerURL(), ws, name)
-	method := "PUT"
+func DataStoresCreate(cfg *config.Config, ws, name, path, method, configure string) error {
+	url := fmt.Sprintf(datastoreCreateShpPattern, cfg.ServerURL(), ws, name, method, configure)
 	f, err := os.Open(path)
 	if err != nil {
 		return fmt.Errorf("can't access such file: %w", err)
 	}
 
-	req := NewReqAccept(cfg, method, url, "application/zip", f)
+	req := NewReqContain(cfg, "PUT", url, "application/zip", f)
 	DoCreate(req)
 	return nil
 }

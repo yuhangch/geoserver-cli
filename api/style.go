@@ -109,6 +109,6 @@ func StyleEdit(cfg *config.Config, ws, name string) error {
 		return fmt.Errorf("read style from vim error")
 	}
 	req := NewReqContain(cfg, method, url, styleFmtDict[style.Format], done)
-	SimplyDo(req, "Updated", "Failed")
+	DoWithMsg(req, "Updated", "Failed")
 	return nil
 }

@@ -80,7 +80,7 @@ func NewReqAccept(cfg *config.Config, method, url, accept string, payload io.Rea
 	return req
 }
 
-// NewReqContain to build a request with custom accept.
+// NewReqContain to build a request with custom content type.
 func NewReqContain(cfg *config.Config, method, url, content string, payload io.Reader) *http.Request {
 	req, err := http.NewRequest(method, url, payload)
 
@@ -158,8 +158,8 @@ func GetText(req *http.Request, pattern string) error {
 	return nil
 }
 
-// SimplyDo just do a request.
-func SimplyDo(req *http.Request, s, f string) error {
+// DoWithMsg just do a request.
+func DoWithMsg(req *http.Request, s, f string) error {
 
 	code, _, err := Do(req)
 	if err != nil {

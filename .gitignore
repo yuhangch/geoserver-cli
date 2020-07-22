@@ -1,3 +1,4 @@
 .geoserver-cli*
 /vendor
 gctl
+*.zip
