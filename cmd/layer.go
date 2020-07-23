@@ -40,7 +40,16 @@ var layerListCmd = &cobra.Command{
 	Short:   "Get layers list in a workspace",
 
 	Run: func(cmd *cobra.Command, args []string) {
-		api.LayersGet(&cfg, workspace)
+		var ws string
+		if len(args) < 1 && len(workspace) < 1 {
+			fmt.Println("require workspace name ")
+		}
+		if len(workspace) < 1 {
+			ws = args[0]
+		} else {
+			ws = workspace
+		}
+		api.LayersGet(&cfg, ws)
 	},
 }
 
@@ -57,7 +66,11 @@ var layerDeleteCmd = &cobra.Command{
 		return nil
 	},
 	Run: func(cmd *cobra.Command, args []string) {
-		api.LayerDelete(&cfg, workspace, args[0])
+		ws, name, err := api.ParseName(args[0], workspace)
+		if err != nil {
+			fmt.Println("datastore name error")
+		}
+		api.LayerDelete(&cfg, ws, name)
 	},
 }
 

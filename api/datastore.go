@@ -25,7 +25,7 @@ import (
 const (
 	datastoresPattern         string = "%s/rest/workspaces/%s/datastores"
 	datastorePattern          string = "%s/rest/workspaces/%s/datastores/%s"
-	datastoreCreateShpPattern string = "%s/rest/workspaces/%s/datastores/%s/%s.shp?configure=%s"
+	datastoreCreateShpPattern string = "%s/rest/workspaces/%s/datastores/%s/%s.%s?configure=%s"
 )
 
 // StoreMethod represent upload method for create datastore.
@@ -73,8 +73,8 @@ func DataStoresGet(cfg *config.Config, ws string) error {
 }
 
 // DataStoresCreate to get datastores list for workspaces.
-func DataStoresCreate(cfg *config.Config, ws, name, path, method, configure string) error {
-	url := fmt.Sprintf(datastoreCreateShpPattern, cfg.ServerURL(), ws, name, method, configure)
+func DataStoresCreate(cfg *config.Config, ws, name, path, method, format, configure string) error {
+	url := fmt.Sprintf(datastoreCreateShpPattern, cfg.ServerURL(), ws, name, method, format, configure)
 	f, err := os.Open(path)
 	if err != nil {
 		return fmt.Errorf("can't access such file: %w", err)

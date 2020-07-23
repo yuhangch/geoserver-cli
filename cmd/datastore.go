@@ -27,6 +27,7 @@ import (
 var (
 	datastoreFile      string
 	datastoreMethod    string
+	datastoreFormat    string
 	datastoreConfigure string
 )
 
@@ -84,7 +85,7 @@ var datastoreCreateCmd = &cobra.Command{
 		if err != nil {
 			fmt.Println("datastore name error")
 		}
-		api.DataStoresCreate(&cfg, ws, name, datastoreFile, datastoreMethod, datastoreConfigure)
+		api.DataStoresCreate(&cfg, ws, name, datastoreFile, datastoreMethod, datastoreFormat, datastoreConfigure)
 
 	},
 }
@@ -126,5 +127,6 @@ func init() {
 	// is called directly, e.g.:
 	datastoreCreateCmd.Flags().StringVarP(&datastoreFile, "file", "f", "", "file path")
 	datastoreCreateCmd.Flags().StringVarP(&datastoreConfigure, "configure", "", "none", "set configure")
-	datastoreCreateCmd.Flags().StringVarP(&datastoreMethod, "method", "", "file", "set datastore method(file,url,external)")
+	datastoreCreateCmd.Flags().StringVarP(&datastoreMethod, "method", "", "file", "set datastore method (file,url,external)")
+	datastoreCreateCmd.Flags().StringVarP(&datastoreMethod, "format", "", "shp", "set datastore format (e.g. shp)")
 }

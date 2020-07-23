@@ -53,7 +53,7 @@ func (svs Servers) nameOf(alias string) *Server {
 	return nil
 }
 
-// indexOf get server index by alias.
+// IndexOf get server index by alias.
 func (svs Servers) IndexOf(alias string) int {
 
 	for k, v := range svs {

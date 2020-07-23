@@ -2,7 +2,6 @@ package api
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/yuhangch/geoserver-cli/config"
 )
@@ -33,6 +32,7 @@ var (
 	layersDeleteStatus map[int]string = map[int]string{
 		200: "Deleted",
 		403: "Layer may be related is not empty (and recurse not true)",
+		500: "Layer may be related is not empty (and recurse not true)",
 		404: "Layer doesn’t exist",
 	}
 )
@@ -73,17 +73,9 @@ func LayersGet(cfg *config.Config, ws string) error {
 
 // LayerDelete to delete a layer.
 func LayerDelete(cfg *config.Config, ws, name string) error {
-	if strings.Contains(name, ":") {
-		strs := strings.Split(name, ":")
-		ws = strs[0]
-		name = strs[1]
-	} else {
-		if len(ws) < 1 {
-			return fmt.Errorf("require workspace name")
-		}
-	}
 
 	url := fmt.Sprintf(layerPattern, cfg.ServerURL(), ws, name)
+	// fmt.Println(url)
 	method := "DELETE"
 	req := NewRequest(cfg, method, url, nil)
 

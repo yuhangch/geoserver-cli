@@ -195,6 +195,7 @@ func Del(req *http.Request, status map[int]string) error {
 	if err != nil {
 		return fmt.Errorf("http request error: %w", err)
 	}
+	// fmt.Println(code)
 
 	if msg, ok := status[code]; ok {
 		fmt.Println(msg)

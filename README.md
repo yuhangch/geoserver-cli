@@ -118,7 +118,33 @@ use command datastore to manage data store
 
 ### Layer  
 
-//TODO 
+use command layer to manage layers 
+
+- List (alias: ls) :list all layers in a workspace 
+
+  ```shell
+  $ gctl layer ls                                                                                                                                                                           
+  layers:
+    - 0 bonn:roads 
+    - 1 tiger:giant_polygon 
+    - 2 tiger:poi 
+    - 3 tiger:poly_landmarks 
+    - 4 tiger:tiger_roads 
+    - 5 nurc:Arc_Sample 
+    - 6 nurc:Img_Sample 
+  $ gctl layer ls tiger                                                                                                                            
+  [tiger] layers:
+    - 0 giant_polygon 
+    - 1 poi 
+    - 2 poly_landmarks 
+    - 3 tiger_roads 
+  ```
+
+- Delete (alias: rm remove): delete a datastore
+
+  ```shell
+  $ gctl layer delete bonn:roads -r
+  ```
 
 ### Style
 
