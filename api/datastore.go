@@ -91,7 +91,7 @@ func DataStoreDelete(cfg *config.Config, ws, name string, r bool) error {
 	url += fmt.Sprintf("?recurse=%t", r)
 	method := "DELETE"
 	req := NewRequest(cfg, method, url, nil)
-	Del(req, datastoreDeleteStatus)
+	Delete(req, datastoreDeleteStatus)
 	return nil
 }
 

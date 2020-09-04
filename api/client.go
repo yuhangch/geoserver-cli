@@ -188,8 +188,8 @@ func DoCreate(req *http.Request) error {
 	return nil
 }
 
-// Del to get response in del response.
-func Del(req *http.Request, status map[int]string) error {
+// Delete to get response in del response.
+func Delete(req *http.Request, status map[int]string) error {
 
 	code, _, err := Do(req)
 	if err != nil {

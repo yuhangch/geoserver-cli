@@ -79,6 +79,6 @@ func LayerDelete(cfg *config.Config, ws, name string) error {
 	method := "DELETE"
 	req := NewRequest(cfg, method, url, nil)
 
-	Del(req, layersDeleteStatus)
+	Delete(req, layersDeleteStatus)
 	return nil
 }

@@ -64,9 +64,8 @@ func (w *WorkSpaceResponse) Fmt() string {
 func WorkSpacesGet(cfg *config.Config) {
 	url := fmt.Sprintf(workspacesPattern, cfg.ServerURL())
 	method := "GET"
-	payload := strings.NewReader("{\"workspace\":{\"name\":\"holaaaassaa\"}}")
 
-	req := NewRequest(cfg, method, url, payload)
+	req := NewRequest(cfg, method, url, nil)
 	var w WorkSpaceResponse
 	Get(req, &w)
 
@@ -110,5 +109,5 @@ func WorkSpaceDelete(cfg *config.Config, name string) {
 	payload := strings.NewReader(fmt.Sprintf("{\"workspace\":{\"name\":\"%s\"}}", name))
 
 	req := NewRequest(cfg, method, url, payload)
-	Del(req, workspaceDeleteStatus)
+	Delete(req, workspaceDeleteStatus)
 }

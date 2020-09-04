@@ -12,7 +12,7 @@
 
 ```shell
 $ go get github.com/yuhangch/geoserver-cli
-$ gctl
+$ gctl  #alias geoserver-cli to gctl
 ```
 
 
@@ -140,7 +140,7 @@ use command layer to manage layers
     - 3 tiger_roads 
   ```
 
-- Delete (alias: rm remove): delete a datastore
+- Delete (alias: rm remove): delete a layer, -r to recurse delete
 
   ```shell
   $ gctl layer delete bonn:roads -r
