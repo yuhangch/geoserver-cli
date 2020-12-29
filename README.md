@@ -4,9 +4,9 @@
 
 - server config 
 - workspace  (CRUD)
-- datastore (shapefile upload, RD)
-- layer (RD)
-- style (edit in vim,RU)
+- datastore (shapefile upload,  R D)
+- layer ( R D)
+- style (edit in vim (test on fish shell), R U)
 
 ## Install:
 
