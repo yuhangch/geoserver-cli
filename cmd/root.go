@@ -41,10 +41,7 @@ var (
 var rootCmd = &cobra.Command{
 	Use:   "gctl",
 	Short: "GeoServer CLI control panel",
-	Long:  `A cli tool for GeoServer access.`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	//	Run: func(cmd *cobra.Command, args []string) { },
+	Long:  `A cli tool for accessing GeoServer.`,
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.

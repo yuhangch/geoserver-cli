@@ -48,7 +48,7 @@ var styleEditCmd = &cobra.Command{
 // styleEditCmd represents the style command
 var styleInfoCmd = &cobra.Command{
 	Use:   "info",
-	Short: "Get info of a style",
+	Short: "Get style's information",
 
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 1 {
