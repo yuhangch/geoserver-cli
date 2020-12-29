@@ -37,7 +37,7 @@ var layerCmd = &cobra.Command{
 var layerListCmd = &cobra.Command{
 	Use:     "list",
 	Aliases: listAlias,
-	Short:   "Get layers list in a workspace",
+	Short:   "HandleBody layers list in a workspace",
 
 	Run: func(cmd *cobra.Command, args []string) {
 		var ws string
