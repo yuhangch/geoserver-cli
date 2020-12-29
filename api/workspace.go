@@ -67,7 +67,7 @@ func WorkSpacesGet(cfg *config.Config) {
 
 	req := NewRequest(cfg, method, url, nil)
 	var w WorkSpaceResponse
-	Get(req, &w)
+	HandleBody(req, &w)
 
 	fmt.Println(w.Fmt())
 }
@@ -80,7 +80,7 @@ func WorkSpacesPost(cfg *config.Config, name string) {
 	payload := strings.NewReader(fmt.Sprintf("{\"workspace\":{\"name\":\"%s\"}}", name))
 
 	req := NewRequest(cfg, method, url, payload)
-	GetText(req, "workspace %s created")
+	HandleText(req, "workspace %s created")
 }
 
 // WorkSpacePut handle delete workspace.

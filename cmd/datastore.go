@@ -45,7 +45,7 @@ var datastoreCmd = &cobra.Command{
 var datastoreListCmd = &cobra.Command{
 	Use:     "list",
 	Aliases: listAlias,
-	Short:   "Get datastores list in a workspace",
+	Short:   "HandleBody datastores list in a workspace",
 
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(workspace) < 1 && len(args) < 1 {

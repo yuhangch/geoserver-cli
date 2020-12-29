@@ -2,3 +2,5 @@
 /vendor
 gctl
 *.zip
+.vscode
+.idea

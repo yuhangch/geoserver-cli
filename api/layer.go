@@ -65,7 +65,7 @@ func LayersGet(cfg *config.Config, ws string) error {
 
 	req := NewRequest(cfg, method, url, nil)
 	var r LayersResponse
-	Get(req, &r)
+	HandleBody(req, &r)
 
 	fmt.Println(r.Fmt())
 	return nil

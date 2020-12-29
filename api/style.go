@@ -52,7 +52,10 @@ func StyleGet(cfg *config.Config, ws, name string) (Style, error) {
 
 	req := NewRequest(cfg, method, url, nil)
 	var s map[string]Style
-	Get(req, &s)
+	err := HandleBody(req, &s)
+	if err != nil {
+		fmt.Println(err)
+	}
 
 	// fmt.Printf("%+v\n", s["style"])
 	return s["style"], nil
@@ -70,7 +73,7 @@ func StyleGetBody(cfg *config.Config, ws, name string) ([]byte, error) {
 		method := "GET"
 
 		req := NewReqAccept(cfg, method, url, accept, nil)
-		_, body, err := Do(req)
+		_, body, err := HandleRequest(req)
 		if err != nil {
 			return nil, err
 		}

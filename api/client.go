@@ -18,12 +18,9 @@ limitations under the License.
 import (
 	"encoding/json"
 	"fmt"
-	"io"
 	"io/ioutil"
 	"net/http"
 	"strings"
-
-	"github.com/yuhangch/geoserver-cli/config"
 )
 
 // ParseName parse name with workspace or not.
@@ -38,7 +35,7 @@ func ParseName(fullname, workspace string) (ws string, name string, err error) {
 		err = nil
 	} else {
 		if len(workspace) < 1 {
-			err = fmt.Errorf("require a workspace name")
+			err = fmt.Errorf("workspace name required")
 		}
 		ws = workspace
 		name = fullname
@@ -47,74 +44,8 @@ func ParseName(fullname, workspace string) (ws string, name string, err error) {
 	return
 }
 
-// NewRequest to build a request from a server config.
-func NewRequest(cfg *config.Config, method, url string, payload io.Reader) *http.Request {
-	req, err := http.NewRequest(method, url, payload)
-
-	if err != nil {
-		fmt.Println(err)
-	}
-	req.Header.Add("Content-Type", "application/json")
-	req.Header.Add("Accept", "application/json")
-	auth, err := cfg.BasicAuth()
-	if err != nil {
-		fmt.Println(err)
-	}
-	req.Header.Add("Authorization", "Basic "+auth)
-	return req
-}
-
-// NewReqAccept to build a request with custom accept.
-func NewReqAccept(cfg *config.Config, method, url, accept string, payload io.Reader) *http.Request {
-	req, err := http.NewRequest(method, url, payload)
-
-	if err != nil {
-		fmt.Println(err)
-	}
-	req.Header.Add("Accept", accept)
-	auth, err := cfg.BasicAuth()
-	if err != nil {
-		fmt.Println(err)
-	}
-	req.Header.Add("Authorization", "Basic "+auth)
-	return req
-}
-
-// NewReqContain to build a request with custom content type.
-func NewReqContain(cfg *config.Config, method, url, content string, payload io.Reader) *http.Request {
-	req, err := http.NewRequest(method, url, payload)
-
-	if err != nil {
-		fmt.Println(err)
-	}
-	req.Header.Add("Content-Type", content)
-	auth, err := cfg.BasicAuth()
-	if err != nil {
-		fmt.Println(err)
-	}
-	req.Header.Add("Authorization", "Basic "+auth)
-	return req
-}
-
-// NewZipRequest to build a request from a server config.
-func NewZipRequest(cfg *config.Config, method, url string, payload io.Reader) *http.Request {
-	req, err := http.NewRequest(method, url, payload)
-
-	if err != nil {
-		fmt.Println(err)
-	}
-	req.Header.Add("Content-Type", "application/zip")
-	req.Header.Add("Accept", "application/json")
-	auth, err := cfg.BasicAuth()
-	if err != nil {
-		fmt.Println(err)
-	}
-	req.Header.Add("Authorization", "Basic "+auth)
-	return req
-}
-
-// Do to execute a request.
-func Do(req *http.Request) (int, []byte, error) {
+// HandleRequest to execute a request.
+func HandleRequest(req *http.Request) (int, []byte, error) {
 	client := &http.Client{}
 	res, err := client.Do(req)
 	if err != nil {
@@ -128,10 +59,10 @@ func Do(req *http.Request) (int, []byte, error) {
 	return res.StatusCode, body, nil
 }
 
-// Get to unmarshal body.
-func Get(req *http.Request, to interface{}) error {
+// HandleBody to raw unmarshal body.
+func HandleBody(req *http.Request, to interface{}) error {
 
-	_, body, err := Do(req)
+	_, body, err := HandleRequest(req)
 	if err != nil {
 		return fmt.Errorf("can't not get the response body")
 	}
@@ -143,10 +74,10 @@ func Get(req *http.Request, to interface{}) error {
 	return nil
 }
 
-// GetText to get response in pure text.
-func GetText(req *http.Request, pattern string) error {
+// HandleText to get response which in pure text format.
+func HandleText(req *http.Request, pattern string) error {
 
-	code, body, err := Do(req)
+	code, body, err := HandleRequest(req)
 	if err != nil {
 		return fmt.Errorf("http request error: %w", err)
 	}
@@ -161,7 +92,7 @@ func GetText(req *http.Request, pattern string) error {
 // DoWithMsg just do a request.
 func DoWithMsg(req *http.Request, s, f string) error {
 
-	code, _, err := Do(req)
+	code, _, err := HandleRequest(req)
 	if err != nil {
 		return fmt.Errorf("http request error: %w", err)
 	}
@@ -174,9 +105,9 @@ func DoWithMsg(req *http.Request, s, f string) error {
 	return nil
 }
 
-// DoCreate to do a request for create.
-func DoCreate(req *http.Request) error {
-	code, _, err := Do(req)
+// Create to do a request for create.
+func Create(req *http.Request) error {
+	code, _, err := HandleRequest(req)
 	if err != nil {
 		return fmt.Errorf("http request error: %w", err)
 	}
@@ -188,10 +119,10 @@ func DoCreate(req *http.Request) error {
 	return nil
 }
 
-// Delete to get response in del response.
+// Delete handle response for delete action.
 func Delete(req *http.Request, status map[int]string) error {
 
-	code, _, err := Do(req)
+	code, _, err := HandleRequest(req)
 	if err != nil {
 		return fmt.Errorf("http request error: %w", err)
 	}

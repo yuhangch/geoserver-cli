@@ -66,7 +66,7 @@ func DataStoresGet(cfg *config.Config, ws string) error {
 
 	req := NewRequest(cfg, method, url, nil)
 	var r DataStoresResponse
-	Get(req, &r)
+	HandleBody(req, &r)
 
 	fmt.Println(r.Fmt())
 	return nil
@@ -81,7 +81,7 @@ func DataStoresCreate(cfg *config.Config, ws, name, path, method, format, config
 	}
 
 	req := NewReqContain(cfg, "PUT", url, "application/zip", f)
-	DoCreate(req)
+	Create(req)
 	return nil
 }
 
